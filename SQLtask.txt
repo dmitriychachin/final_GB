@@ -1,0 +1,64 @@
+CREATE DATABASE human_friends;
+
+CREATE TABLE pets (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, type VARCHAR(10));
+
+CREATE TABLE bob (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, type VARCHAR(10));
+
+CREATE TABLE cat (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, name VARCHAR(10), bdate DATETIME, com VARCHAR(50), type_id);
+
+INSERT INTO cat (name, bdate, com, type_id) VALUES (какое-то имя, какая-то дата, какие-то команды, 1);
+
+ALTER TABLE cat ADD FORIGEN KEY (type_id) REFERENCES pets(id);
+
+CREATE TABLE dog (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, name VARCHAR(10), bdate DATETIME, com VARCHAR(50), type_id);
+
+INSERT INTO dog (name, bdate, com, type_id) VALUES (какое-то имя, какая-то дата, какие-то команды, 2);
+
+ALTER TABLE dog ADD FORIGEN KEY (type_id) REFERENCES pets(id);
+
+CREATE TABLE humster (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, name VARCHAR(10), bdate DATETIME, com VARCHAR(50), type_id);
+
+INSERT INTO humster (name, bdate, com, type_id) VALUES (какое-то имя, какая-то дата, какие-то команды, 3);
+
+ALTER TABLE humster ADD FORIGEN KEY (type_id) REFERENCES pets(id);
+
+CREATE TABLE horse (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, name VARCHAR(10), bdate DATETIME, com VARCHAR(50), type_id);
+
+INSERT INTO horse (name, bdate, com, type_id) VALUES (какое-то имя, какая-то дата, какие-то команды, 1);
+
+ALTER TABLE horse ADD FORIGEN KEY (type_id) REFERENCES bob(id);
+
+CREATE TABLE camel (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, name VARCHAR(10), bdate DATETIME, com VARCHAR(50), type_id);
+
+INSERT INTO camel (name, bdate, com, type_id) VALUES (какое-то имя, какая-то дата, какие-то команды, 2);
+
+ALTER TABLE camel ADD FORIGEN KEY (type_id) REFERENCES bob(id);
+
+CREATE TABLE donkey (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, name VARCHAR(10), bdate DATETIME, com VARCHAR(50), type_id);
+
+INSERT INTO donkey (name, bdate, com, type_id) VALUES (какое-то имя, какая-то дата, какие-то команды, 3);
+
+ALTER TABLE donkey ADD FORIGEN KEY (type_id) REFERENCES bob(id);
+
+DROP TABLE camel;
+
+CREATE TABLE horsedonkey(id INT NOT NULL AUTO_INCREMENT PRIMARY KEY)
+SELECT name, bdate, com
+FROM horse UNION 
+SELECT name, bdate, com
+FROM donkey;
+
+CREATE TABLE allAnimals(id INT NOT NULL AUTO_INCREMENT PRIMARY KEY)
+SELECT name, bdate, com, 'cat' AS oldTable
+FROM cat UNION
+SELECT name, bdate, com, 'dog' AS oldTable
+FROM dog UNION
+SELECT name, bdate, com, 'humster' AS oldTable
+FROM humster UNION
+SELECT name, bdate, com, 'horsedonkey' AS oldTable
+FROM horsedonkey;
+
+CREATE TABLE youngAnimals (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY)
+SELECT name, bdate, com, Round((year(current_date()) - year(bdate)) + (month(current_date() - month(bdate)))/10, 1) AS age
+FROM allAnimals
+WHERE Round((year(current_date()) - year(bdate)) + (month(current_date() - month(bdate)))/10, 1) BETWEEN 1 AND 3;
